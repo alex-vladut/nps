@@ -1,0 +1,192 @@
+{
+  "version": 2,
+  "cli": {
+    "defaultCollection": "@nrwl/react"
+  },
+  "defaultProject": "nps-web",
+  "generators": {
+    "@nrwl/react": {
+      "application": {
+        "style": "@emotion/styled",
+        "linter": "eslint",
+        "babel": true
+      },
+      "component": {
+        "style": "@emotion/styled"
+      },
+      "library": {
+        "style": "@emotion/styled",
+        "linter": "eslint"
+      }
+    }
+  },
+  "projects": {
+    "nps-web": {
+      "root": "apps/nps-web",
+      "sourceRoot": "apps/nps-web/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/web:build",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/apps/nps-web",
+            "index": "apps/nps-web/src/index.html",
+            "main": "apps/nps-web/src/main.tsx",
+            "polyfills": "apps/nps-web/src/polyfills.ts",
+            "tsConfig": "apps/nps-web/tsconfig.app.json",
+            "assets": [
+              "apps/nps-web/src/favicon.ico",
+              "apps/nps-web/src/assets"
+            ],
+            "styles": [],
+            "scripts": [],
+            "webpackConfig": "@nrwl/react/plugins/webpack"
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/nps-web/src/environments/environment.ts",
+                  "with": "apps/nps-web/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/web:dev-server",
+          "options": {
+            "buildTarget": "nps-web:build"
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "nps-web:build:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/nps-web/**/*.{ts,tsx,js,jsx}"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/apps/nps-web"
+          ],
+          "options": {
+            "jestConfig": "apps/nps-web/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "nps-web-e2e": {
+      "root": "apps/nps-web-e2e",
+      "sourceRoot": "apps/nps-web-e2e/src",
+      "projectType": "application",
+      "targets": {
+        "e2e": {
+          "executor": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/nps-web-e2e/cypress.json",
+            "tsConfig": "apps/nps-web-e2e/tsconfig.e2e.json",
+            "devServerTarget": "nps-web:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "nps-web:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/nps-web-e2e/**/*.{js,ts}"
+            ]
+          }
+        }
+      }
+    },
+    "nps-api": {
+      "root": "apps/nps-api",
+      "sourceRoot": "apps/nps-api/src",
+      "projectType": "application",
+      "prefix": "nps-api",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/apps/nps-api",
+            "main": "apps/nps-api/src/main.ts",
+            "tsConfig": "apps/nps-api/tsconfig.app.json",
+            "assets": [
+              "apps/nps-api/src/assets"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/nps-api/src/environments/environment.ts",
+                  "with": "apps/nps-api/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "nps-api:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/nps-api/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/apps/nps-api"
+          ],
+          "options": {
+            "jestConfig": "apps/nps-api/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    }
+  }
+}
