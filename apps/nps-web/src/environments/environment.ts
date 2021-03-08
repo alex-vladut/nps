@@ -3,4 +3,5 @@
 
 export const environment = {
   production: false,
+  npsApi: 'http://localhost:3333/api',
 };

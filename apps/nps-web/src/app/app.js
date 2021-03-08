@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import styled from '@emotion/styled';
 import { Global, css } from '@emotion/react';
@@ -7,6 +7,8 @@ import { Question, CompanyName, SubmitButton, ThankYou } from '@nps/ui';
 import { useSearchParams } from '@nps/utils';
 
 import { useFetchSurvey } from './useFetchSurvey';
+
+import { environment } from '../environments/environment';
 
 const StyledContent = styled.div`
   max-width: 800px;
@@ -34,10 +36,15 @@ export function App() {
   const initialPage = useMemo(() =>
     data?.pages.find((page) => !page.conditions)
   );
-  const [currentPage, setCurrentPage] = useState(initialPage);
+  const [currentPage, setCurrentPage] = useState();
   const [finished, setFinished] = useState(false);
 
-  if (loading) {
+  useEffect(() => {
+    if (currentPage || !initialPage) return;
+    setCurrentPage(initialPage);
+  }, [currentPage, initialPage]);
+
+  if (loading || !data || !currentPage) {
     return <div>Loading...</div>;
   }
   if (error) {
@@ -49,7 +56,7 @@ export function App() {
     setValues({ ...values, [name]: newValue });
   };
 
-  const handleOnSubmit = () => {
+  const handleOnSubmit = async () => {
     if (currentPage.id === initialPage.id) {
       // assuming a single page can be active at a given time
       const nextPage = data.pages
@@ -57,7 +64,20 @@ export function App() {
         .find((page) => evaluateConditions(page.conditions));
       setCurrentPage(nextPage);
     } else {
-      setFinished(true);
+      try {
+        await fetch(
+          `${environment.npsApi}/surveys/${data.survey_id}/responses`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(values),
+          }
+        );
+        setFinished(true);
+      } catch (err) {
+        // TODO show error notification
+        console.error(err);
+      }
     }
   };
 
