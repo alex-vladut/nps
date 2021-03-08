@@ -18,6 +18,8 @@
   "projects": {
     "nps-web": { "tags": [] },
     "nps-web-e2e": { "tags": [], "implicitDependencies": ["nps-web"] },
-    "nps-api": { "tags": [] }
+    "nps-api": { "tags": [] },
+    "ui": { "tags": ["shared"] },
+    "utils": { "tags": ["shared"] }
   }
 }
