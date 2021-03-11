@@ -33,8 +33,9 @@ export function App() {
   const params = useSearchParams();
   const { data, loading, error } = useFetchSurvey(params.survey_id);
   const [values, setValues] = useState({});
-  const initialPage = useMemo(() =>
-    data?.pages.find((page) => !page.conditions)
+  const initialPage = useMemo(
+    () => data?.pages.find((page) => !page.conditions),
+    [data]
   );
   const [currentPage, setCurrentPage] = useState();
   const [finished, setFinished] = useState(false);
